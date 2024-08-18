@@ -164,7 +164,7 @@ const ResidentProfile = () => {
         </div>
       </div>
 
-      <div className="absolute top-[159px] left-[134px] w-9 h-9 relative">
+      <div className="absolute top-[159px] left-[134px] w-9 h-9">
         <div className="w-[30px] h-[30px] left-[3px] top-[3px] absolute"></div>
       </div>
     </div>
