@@ -11,6 +11,7 @@ const Admin = () => {
     neighborhood: 'Riara Apartments',
     profilePicture: 'https://via.placeholder.com/56x56'
   });
+  
   const [newAdminData, setNewAdminData] = useState({
     name: '',
     email: '',
