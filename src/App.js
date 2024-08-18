@@ -17,13 +17,13 @@ import AdminProfile from './components/AdminProfile';
 import AddEvent from './components/AddEvent';
 import AddNews from './components/AddNews';
 import AddResident from './components/AddResident';
-
+import HomePage from './components/HomePage';
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/resident/dashboard" element={<ResidentDashboard />} />
+        <Route path="/" element={<ResidentDashboard />} />
         <Route path="/resident/events" element={<ResidentEvents />} />
         <Route path="/resident/news" element={<ResidentNews />} />
         <Route path="/resident/profile" element={<ResidentProfile />} />
