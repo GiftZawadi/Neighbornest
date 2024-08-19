@@ -51,10 +51,10 @@ function Login() {
 
         if (data.role === 'Admin') {
           navigate('/admin-dashboard');
-        } else if (data.role === 'superadmin') {
-          navigate('/superadmin-dashboard');
-        } else if (data.role === 'resident') {
-          navigate('/resident-dashboard');
+        } else if (data.role === 'SuperAdmin') {
+          navigate('/dashboard');
+        } else if (data.role === 'Resident') {
+          navigate('/resident/dashboard');
         } else {
           toast.error('Unknown user role');
         }
