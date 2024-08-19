@@ -1,11 +1,6 @@
+
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import AboutUs from './components/AboutUs';
-import ContactUs from './components/ContactUs';
-import Dashboard from './components/Dashboard';
-import SuperAdminNotifications from './components/SuperAdminNotifications';
-import SuperAdminProfilePage from './components/SuperAdminProfilePage';
-import Logout from './components/Logout';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import Login from './pages/Login';
 import AdminView from './components/AdminView';
@@ -17,6 +12,7 @@ import AdminProfile from './components/AdminProfile';
 import AddEvent from './components/AddEvent';
 import AddNews from './components/AddNews';
 import AddResident from './components/AddResident';
+import HomePage from './pages/HomePage';
 
 
 function App() {
@@ -30,6 +26,11 @@ function App() {
         <Route path="/superadminnotifications" element={<SuperAdminNotifications />} /> 
         <Route path="/superadminprofile" element={<SuperAdminProfilePage />} /> 
         <Route path="/logout" element={<Logout />} /> 
+        <Route path="/resident/dashboard" element={<ResidentDashboard />} />
+        <Route path="/resident/events" element={<ResidentEvents />} />
+        <Route path="/resident/news" element={<ResidentNews />} />
+        <Route path="/resident/profile" element={<ResidentProfile />} />
+        <Route path="/resident/notifications" element={<ResidentNotification />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/admin-dashboard" element={<AdminView />} />
