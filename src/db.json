@@ -1,0 +1,43 @@
+{
+    "superadmin": {
+      "id": 1,
+      "name": "Benson Kiptoo",
+      "email": "bensonk@gmail.com",
+      "gender": "Male",
+      "password": "password123",
+      "profilePicture": "https://via.placeholder.com/100x100",
+      "neighborhoods": [
+        {
+          "id": 1,
+          "name": "Kilimani",
+          "location": "Nairobi",
+          "image": "https://via.placeholder.com/200"
+        },
+        {
+          "id": 2,
+          "name": "Westlands",
+          "location": "Nairobi",
+          "image": "https://via.placeholder.com/200"
+        }
+      ],
+      "admins": [
+        {
+          "id": 1,
+          "name": "Lora Smith",
+          "email": "lorasmith@riaraapt.com",
+          "password": "password123",
+          "neighborhood": "Riara Apartments",
+          "profilePicture": "https://via.placeholder.com/56x56"
+        },
+        {
+          "id": 2,
+          "name": "John Doe",
+          "email": "johndoe@example.com",
+          "password": "password123",
+          "neighborhood": "Westlands",
+          "profilePicture": "https://via.placeholder.com/56x56"
+        }
+      ]
+    }
+  }
+  
