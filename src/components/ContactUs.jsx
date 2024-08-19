@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import logo from '../assets/logo.svg';
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -52,7 +53,7 @@ const ContactUs = () => {
         <Link to="/">
           <img
             className="WhiteAndBlackModernAbstractBeautyLogoRemovebgPreview1 w-[162px] h-[127px]"
-            src="./assets/White_And_Black_Modern_Abstract_Beauty_Logo-removebg-preview%201.svg"
+            src={logo}
             alt="Logo"
           />
         </Link>

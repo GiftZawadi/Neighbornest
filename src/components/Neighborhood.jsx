@@ -15,7 +15,7 @@ const Neighborhood = () => {
 
   useEffect(() => {
     // Fetch neighborhoods from the backend when the component mounts
-    fetch(`http://127.0.0.1:5000/superadmins/${superAdminId}/neighborhoods`, {
+    fetch(`https://neighborhood-nest-6.onrender.com/superadmins/${superAdminId}/neighborhoods`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -45,7 +45,7 @@ const Neighborhood = () => {
 
   const handleDeleteClick = async (id) => {
     try {
-      const response = await fetch(`http://127.0.0.1:5000/superadmins/${superAdminId}/neighborhoods/${id}`, {
+      const response = await fetch(`https://neighborhood-nest-6.onrender.com/superadmins/${superAdminId}/neighborhoods/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -72,7 +72,7 @@ const Neighborhood = () => {
       let response;
       if (currentNeighborhood.id) {
         // Update neighborhood
-        response = await fetch(`http://127.0.0.1:5000/superadmins/${superAdminId}/neighborhoods/${currentNeighborhood.id}`, {
+        response = await fetch(`https://neighborhood-nest-6.onrender.com/superadmins/${superAdminId}/neighborhoods/${currentNeighborhood.id}`, {
           method: 'PUT',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -81,7 +81,7 @@ const Neighborhood = () => {
         });
       } else {
         // Add new neighborhood
-        response = await fetch(`http://127.0.0.1:5000/superadmins/${superAdminId}/neighborhoods`, {
+        response = await fetch(`https://neighborhood-nest-6.onrender.com/superadmins/${superAdminId}/neighborhoods`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,

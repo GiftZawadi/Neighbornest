@@ -5,7 +5,6 @@ const SuperAdminProfilePage = () => {
   const [superAdminData, setSuperAdminData] = useState({
     name: '',
     email: '',
-    gender: '',
     password: '',
     profilePicture: ''
   });
@@ -14,10 +13,10 @@ const SuperAdminProfilePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch the SuperAdmin profile data from the backend (hardcoded data)
+    // Fetch the SuperAdmin profile data from the backend
     const fetchSuperAdminData = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/superadmin', {
+        const response = await fetch('https://neighborhood-nest-6.onrender.com/superadmins/{super_admin_id}', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -58,7 +57,6 @@ const SuperAdminProfilePage = () => {
     const formData = new FormData();
     formData.append('name', superAdminData.name);
     formData.append('email', superAdminData.email);
-    formData.append('gender', superAdminData.gender);
     formData.append('password', superAdminData.password);
 
     if (superAdminData.profilePicture instanceof File) {
@@ -66,7 +64,7 @@ const SuperAdminProfilePage = () => {
     }
 
     try {
-      const response = await fetch('http://127.0.0.1:5000/superadmin', {
+      const response = await fetch('https://neighborhood-nest-6.onrender.com/superadmins/{super_admin_id}', {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -128,7 +126,6 @@ const SuperAdminProfilePage = () => {
       <div className="Rectangle6692 w-[1282px] h-[856px] left-[79px] top-[127px] absolute rounded-[10px] border border-black" />
       <div className="FullName left-[423px] top-[417px] absolute opacity-80 text-black text-base font-normal font-['Poppins']">Full Name</div>
       <div className="Email left-[423px] top-[529px] absolute opacity-80 text-black text-base font-normal font-['Poppins']">Email</div>
-      <div className="Gender left-[423px] top-[643px] absolute opacity-80 text-black text-base font-normal font-['Poppins']">Gender</div>
       <div className="Password left-[423px] top-[745px] absolute opacity-80 text-black text-base font-normal font-['Poppins']">Password</div>
       <img className="Ellipse11 w-[100px] h-[100px] left-[423px] top-[287px] absolute rounded-full" src={superAdminData.profilePicture instanceof File ? URL.createObjectURL(superAdminData.profilePicture) : superAdminData.profilePicture} alt="Profile" />
       <div className="Group239179 left-[547px] top-[307px] absolute">
@@ -149,7 +146,6 @@ const SuperAdminProfilePage = () => {
       </div>
       <div className="Rectangle6698 w-[593px] h-[52px] left-[423px] top-[455px] absolute bg-[#f9f9f9] rounded-lg" />
       <div className="Rectangle6694 w-[593px] h-[52px] left-[423px] top-[565px] absolute bg-[#f9f9f9] rounded-lg" />
-      <div className="Rectangle6696 w-[593px] h-[52px] left-[423px] top-[679px] absolute bg-[#f9f9f9] rounded-lg" />
       <div className="Rectangle6699 w-[593px] h-[52px] left-[423px] top-[781px] absolute bg-[#f9f9f9] rounded-lg" />
       {isEditing ? (
         <div className="edit-form">
@@ -166,13 +162,6 @@ const SuperAdminProfilePage = () => {
             value={superAdminData.email}
             onChange={handleChange}
             className="Email left-[423px] top-[529px] absolute opacity-80 text-black text-base font-normal font-['Poppins']"
-          />
-          <input
-            type="text"
-            name="gender"
-            value={superAdminData.gender}
-            onChange={handleChange}
-            className="Gender left-[423px] top-[643px] absolute opacity-80 text-black text-base font-normal font-['Poppins']"
           />
           <input
             type="password"
@@ -193,7 +182,6 @@ const SuperAdminProfilePage = () => {
         <div>
           <div className="BensonKiptoo left-[443px] top-[469px] absolute opacity-40 text-black text-base font-normal font-['Poppins']">{superAdminData.name}</div>
           <div className="BensonkGmailCom left-[443px] top-[581px] absolute opacity-40 text-black text-base font-normal font-['Poppins']">{superAdminData.email}</div>
-          <div className="Male left-[443px] top-[693px] absolute opacity-40 text-black text-base font-normal font-['Poppins']">{superAdminData.gender}</div>
           <div className="Passowrd left-[443px] top-[797px] absolute opacity-40 text-black text-base font-normal font-['Poppins']">{superAdminData.password}</div>
         </div>
       )}

@@ -5,13 +5,14 @@ const Admin = () => {
   const [showAddAdminForm, setShowAddAdminForm] = useState(false);
   const [admins, setAdmins] = useState([]);
   const [adminData, setAdminData] = useState({
-    name: 'Lora Smith',
-    email: 'lorasmith@riaraapt.com',
+    id: null, // Add id to keep track of the admin being edited
+    name: '',
+    email: '',
     password: '',
-    neighborhood: 'Riara Apartments',
-    profilePicture: 'https://via.placeholder.com/56x56'
+    neighborhood: '',
+    profilePicture: ''
   });
-  
+
   const [newAdminData, setNewAdminData] = useState({
     name: '',
     email: '',
@@ -20,43 +21,53 @@ const Admin = () => {
     profilePicture: ''
   });
 
+  // Fetch admins from the backend
   const fetchAdmins = useCallback(async () => {
     try {
-      const response = await fetch('http://127.0.0.1:5000/superadmin/1/admins', {
+      const response = await fetch('https://neighborhood-nest-6.onrender.com/superadmin/1/admins', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
       });
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error('Failed to fetch admins');
       }
       const data = await response.json();
       setAdmins(data);
     } catch (error) {
       console.error('Error fetching admins:', error);
     }
-  }, []); // Empty array as dependencies since fetchAdmins doesn't rely on any props or state
+  }, []);
 
   useEffect(() => {
     fetchAdmins();
-  }, [fetchAdmins]); // Include fetchAdmins as a dependency
+  }, [fetchAdmins]);
 
+  // Handle Edit Click
   const handleEditClick = (admin) => {
-    setAdminData(admin);
+    setAdminData({
+      id: admin.id, // Setting id for the admin being edited
+      name: admin.name,
+      email: admin.email,
+      password: '', // Resetting the password field
+      neighborhood: admin.neighborhood,
+      profilePicture: admin.profilePicture
+    });
     setIsEditing(true);
   };
 
+  // Handle Delete Click
   const handleDeleteClick = async (id) => {
     try {
-      const response = await fetch(`http://127.0.0.1:5000/superadmin/1/admins/${id}`, {
+      const response = await fetch(`https://neighborhood-nest-6.onrender.com/superadmin/1/admins/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
       });
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error('Failed to delete admin');
       }
       setAdmins(admins.filter(admin => admin.id !== id));
     } catch (error) {
@@ -64,14 +75,21 @@ const Admin = () => {
     }
   };
 
+  // Handle Save Click (Edit)
   const handleSaveClick = async () => {
     try {
       const formData = new FormData();
-      for (const key in adminData) {
-        formData.append(key, adminData[key]);
+      formData.append('name', adminData.name);
+      formData.append('email', adminData.email);
+      formData.append('neighborhood', adminData.neighborhood);
+      if (adminData.password) {
+        formData.append('password', adminData.password); // Only append if the password is not empty
+      }
+      if (adminData.profilePicture instanceof File) {
+        formData.append('profilePicture', adminData.profilePicture);
       }
 
-      const response = await fetch(`http://127.0.0.1:5000/superadmin/1/admins/${adminData.id}`, {
+      const response = await fetch(`https://neighborhood-nest-6.onrender.com/superadmin/1/admins/${adminData.id}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -80,17 +98,26 @@ const Admin = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error('Failed to update admin');
       }
 
       const data = await response.json();
-      setAdmins(admins.map(admin => admin.id === adminData.id ? { ...admin, ...data } : admin));
+      setAdmins(admins.map(admin => admin.id === adminData.id ? data : admin));
       setIsEditing(false);
+      setAdminData({
+        id: null,
+        name: '',
+        email: '',
+        password: '',
+        neighborhood: '',
+        profilePicture: ''
+      });
     } catch (error) {
       console.error('Error updating admin:', error);
     }
   };
 
+  // Handle Change for Input Fields
   const handleChange = (e) => {
     setAdminData({
       ...adminData,
@@ -98,17 +125,12 @@ const Admin = () => {
     });
   };
 
-  const handleFileUpload = (e) => {
-    setAdminData({
-      ...adminData,
-      profilePicture: e.target.files[0]
-    });
-  };
-
+  // Handle Add Admin Click
   const handleAddAdminClick = () => {
     setShowAddAdminForm(true);
   };
 
+  // Handle Input Change for Adding New Admin
   const handleInputChange = (e) => {
     setNewAdminData({
       ...newAdminData,
@@ -116,14 +138,19 @@ const Admin = () => {
     });
   };
 
+  // Handle Add Admin Submit
   const handleAddAdminSubmit = async () => {
     try {
       const formData = new FormData();
-      for (const key in newAdminData) {
-        formData.append(key, newAdminData[key]);
+      formData.append('name', newAdminData.name);
+      formData.append('email', newAdminData.email);
+      formData.append('neighborhood', newAdminData.neighborhood);
+      formData.append('password', newAdminData.password);
+      if (newAdminData.profilePicture instanceof File) {
+        formData.append('profilePicture', newAdminData.profilePicture);
       }
 
-      const response = await fetch('http://127.0.0.1:5000/superadmin/1/admins', {
+      const response = await fetch('https://neighborhood-nest-6.onrender.com/superadmin/1/admins', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -132,14 +159,14 @@ const Admin = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error('Failed to add admin');
       }
 
       const data = await response.json();
       setAdmins([...admins, data]);
 
-      // Sending login details to the new admin
-      await fetch('http://127.0.0.1:5000/send-login-details', {
+      // Optionally send login details
+      await fetch('https://neighborhood-nest-6.onrender.com/send-login-details', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -226,7 +253,7 @@ const Admin = () => {
                 <div className="Button self-stretch px-[30px] py-[17px] bg-[#cbdae4] rounded justify-center items-center gap-2.5 inline-flex">
                   <input
                     type="file"
-                    onChange={handleFileUpload}
+                    onChange={(e) => setNewAdminData({ ...newAdminData, profilePicture: e.target.files[0] })}
                     className="self-stretch text-center text-black text-lg font-medium font-['Inter']"
                   />
                 </div>
@@ -252,7 +279,7 @@ const Admin = () => {
               <input
                 type="file"
                 name="profilePicture"
-                onChange={(e) => setAdminData({ ...adminData, profilePicture: URL.createObjectURL(e.target.files[0]) })}
+                onChange={(e) => setAdminData({ ...adminData, profilePicture: e.target.files[0] })}
               />
             </div>
             <input type="text" name="name" value={adminData.name} onChange={handleChange} className="input-field" />
@@ -277,7 +304,7 @@ const Admin = () => {
               <div className="TablerEdit w-6 h-6 relative">
                 <div className="Group w-[17px] h-[17px] left-[4px] top-[3px] absolute"></div>
               </div>
-              <div className="Edit text-[#4c4c4c] text-base font-medium font-['Manrope'] leading-normal" onClick={handleEditClick}>Edit</div>
+              <div className="Edit text-[#4c4c4c] text-base font-medium font-['Manrope'] leading-normal" onClick={() => handleEditClick(adminData)}>Edit</div>
             </div>
             <div className="Frame491 w-[109px] pl-4 pr-6 py-2 bg-[#cfebf9] rounded justify-start items-center gap-3 inline-flex">
               <div className="IcOutlineDelete w-6 h-6 relative"></div>
