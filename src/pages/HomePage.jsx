@@ -44,9 +44,9 @@ function HomePage() {
       alt="Logo"
     />
     <div className="Frame3 self-stretch justify-end items-center gap-10 inline-flex">
-      <Link className="Home w-[48.41px] text-black text-sm font-normal font-['Rubik']">Home</Link>
-      <Link className="AboutUs w-[74.48px] text-black text-sm font-normal font-['Rubik']">About Us</Link>
-      <Link className="ContactUs w-[76px] text-black text-sm font-normal font-['Rubik']">Contact Us</Link>
+      <Link to="/" className="Home w-[48.41px] text-black text-sm font-normal font-['Rubik']">Home</Link>
+      <Link to="/about-us"className="AboutUs w-[74.48px] text-black text-sm font-normal font-['Rubik']">About Us</Link>
+      <Link to="/contact-us"className="ContactUs w-[76px] text-black text-sm font-normal font-['Rubik']">Contact Us</Link>
       <div className="Frame2 h-[43px] px-6 py-[13px] bg-[#cfebf9] rounded-xl justify-start items-start gap-2.5 flex cursor-pointer"
         onClick={handleLoginRedirect}>
         <div className="Login text-black text-sm font-normal font-['Rubik']">Login </div>
