@@ -5,7 +5,7 @@ const Admin = () => {
   const [showAddAdminForm, setShowAddAdminForm] = useState(false);
   const [admins, setAdmins] = useState([]);
   const [adminData, setAdminData] = useState({
-    id: null, // Add id to keep track of the admin being edited
+    id: null,
     name: '',
     email: '',
     password: '',
@@ -47,7 +47,7 @@ const Admin = () => {
   // Handle Edit Click
   const handleEditClick = (admin) => {
     setAdminData({
-      id: admin.id, // Setting id for the admin being edited
+      id: admin.id,
       name: admin.name,
       email: admin.email,
       password: '', // Resetting the password field
@@ -83,7 +83,7 @@ const Admin = () => {
       formData.append('email', adminData.email);
       formData.append('neighborhood', adminData.neighborhood);
       if (adminData.password) {
-        formData.append('password', adminData.password); // Only append if the password is not empty
+        formData.append('password', adminData.password);
       }
       if (adminData.profilePicture instanceof File) {
         formData.append('profilePicture', adminData.profilePicture);
@@ -164,16 +164,6 @@ const Admin = () => {
 
       const data = await response.json();
       setAdmins([...admins, data]);
-
-      // Optionally send login details
-      await fetch('https://neighborhood-nest-6.onrender.com/send-login-details', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({ email: newAdminData.email, password: newAdminData.password }),
-      });
 
       setShowAddAdminForm(false);
       setNewAdminData({

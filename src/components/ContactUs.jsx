@@ -25,7 +25,7 @@ const ContactUs = () => {
     return re.test(String(email).toLowerCase());
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setFormError('');
     setFormSuccess('');
@@ -42,9 +42,25 @@ const ContactUs = () => {
       return;
     }
 
-    // Simulate form submission
-    setFormSuccess('Your submission was successful!');
-    setFormData({ name: '', email: '', service: '', message: '' });
+    // Submitting the form data to the backend
+    try {
+      const response = await fetch('https://neighborhood-nest-6.onrender.com/superadmins/1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send message');
+      }
+
+      setFormSuccess('Your submission was successful!');
+      setFormData({ name: '', email: '', service: '', message: '' });
+    } catch (error) {
+      setFormError('Failed to send message. Please try again later.');
+    }
   };
 
   return (

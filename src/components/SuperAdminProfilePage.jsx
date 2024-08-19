@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import logo from '../assets/logo.svg';
 
 const SuperAdminProfilePage = () => {
   const [superAdminData, setSuperAdminData] = useState({
@@ -85,26 +86,26 @@ const SuperAdminProfilePage = () => {
   };
 
   const handleEditClick = () => {
-    setIsEditing(!isEditing); // Toggle between edit and view mode
+    setIsEditing(!isEditing); 
     if (isEditing) {
-      handleSave(); // Save the changes if exiting edit mode
+      handleSave();
     }
   };
 
   const handleExit = () => {
-    navigate('/dashboard/admins'); // Redirect to the default dashboard/admins page
+    navigate('/dashboard/admins'); 
   };
 
   return (
     <div className="SuperAdminProfile w-[1440px] h-[1430px] relative bg-[#cbdae4]">
-      <img className="WhiteAndBlackModernAbstractBeautyLogoRemovebgPreview1 w-[162px] h-[127px] left-0 top-0 absolute" src="https://via.placeholder.com/162x127" alt="Logo" />
+      <img className="WhiteAndBlackModernAbstractBeautyLogoRemovebgPreview1 w-[162px] h-[127px] left-0 top-0 absolute" src={logo} alt="Logo" />
       <div className="Frame482 px-[124px] pt-[52px] pb-[101px] left-0 top-[1069px] absolute border-t border-black justify-center items-center gap-[641px] inline-flex">
         <div className="Frame297 self-stretch flex-col justify-start items-center gap-[39px] inline-flex">
           <div className="Contacts text-[#2d2e2e] text-[32px] font-semibold font-['Inter']">Contacts</div>
           <div className="Frame296 flex-col justify-center items-center gap-4 flex">
             <div className="Frame478 justify-start items-center gap-4 inline-flex">
               <div className="SocialNetwork w-10 h-10 relative" />
-              <div className="3342024792 text-[#2d2e2e] text-base font-normal font-['Inter']">(334) 202-4792</div>
+              <div className="3342024792 text-[#2d2e2e] text-base font-normal font-['Inter']">{/* Add your dynamic phone number here */}</div>
             </div>
             <div className="Frame479 justify-start items-center gap-4 inline-flex">
               <div className="SocialNetwork w-10 h-10 relative" />
@@ -112,7 +113,7 @@ const SuperAdminProfilePage = () => {
             </div>
             <div className="Frame480 justify-start items-center gap-4 inline-flex">
               <div className="IconPack w-5 h-5 relative" />
-              <div className="NeighbornestGmailCom text-[#2d2e2e] text-base font-normal font-['Inter']">neighbornest@gmail.com</div>
+              <div className="NeighbornestGmailCom text-[#2d2e2e] text-base font-normal font-['Inter']">{superAdminData.email}</div>
             </div>
           </div>
         </div>
