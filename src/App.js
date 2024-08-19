@@ -2,6 +2,18 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
+import AboutUs from './components/AboutUs';
+import ContactUs from './components/ContactUs';
+import Dashboard from './components/Dashboard';
+import SuperAdminNotifications from './components/SuperAdminNotifications';
+import SuperAdminProfilePage from './components/SuperAdminProfilePage';
+import Logout from './components/Logout';
+import './App.css';
+import ResidentDashboard from './components/ResidentDashboard';
+import ResidentEvents from './components/ResidentEvents';
+import ResidentNews from './components/ResidentNews';
+import ResidentProfile from './components/ResidentProfile';
+import ResidentNotification from './components/ResidentNotification';
 import Login from './pages/Login';
 import AdminView from './components/AdminView';
 import News from './components/News';
@@ -14,7 +26,6 @@ import AddNews from './components/AddNews';
 import AddResident from './components/AddResident';
 import HomePage from './pages/HomePage';
 
-
 function App() {
   return (
     <Router>
@@ -26,6 +37,12 @@ function App() {
         <Route path="/superadminnotifications" element={<SuperAdminNotifications />} /> 
         <Route path="/superadminprofile" element={<SuperAdminProfilePage />} /> 
         <Route path="/logout" element={<Logout />} /> 
+        <Route path="/about-us" element={<AboutUs />} />
+        <Route path="/contact-us" element={<ContactUs />} />
+        <Route path="/dashboard/*" element={<Dashboard />} />
+        <Route path="/superadminnotifications" element={<SuperAdminNotifications />} /> {/* Add this route */}
+        <Route path="/superadminprofile" element={<SuperAdminProfilePage />} /> {/* Add this route */}
+        <Route path="/logout" element={<Logout />} /> {/* Add this route */}
         <Route path="/resident/dashboard" element={<ResidentDashboard />} />
         <Route path="/resident/events" element={<ResidentEvents />} />
         <Route path="/resident/news" element={<ResidentNews />} />

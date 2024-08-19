@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import logo from '../assets/logo.svg';
 
 const SuperAdminSidebar = () => {
   return (
     <div className="Frame483 w-[245px] h-[864px] relative bg-[#264065]">
       <img
         className="WhiteAndBlackModernAbstractBeautyLogoRemovebgPreview1 w-[162px] h-[127px] left-0 top-0 absolute"
-        src="https://via.placeholder.com/162x127"
+        src={logo}
         alt="Logo"
       />
       <div className="Frame9 left-[39px] top-[504px] absolute flex-col justify-center items-start gap-6 inline-flex">

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import logo from '../assets/logo.svg';
 
 const SuperAdminProfilePage = () => {
   const [superAdminData, setSuperAdminData] = useState({
     name: '',
     email: '',
-    gender: '',
     password: '',
     profilePicture: ''
   });
@@ -14,10 +14,10 @@ const SuperAdminProfilePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch the SuperAdmin profile data from the backend (hardcoded data)
+    // Fetch the SuperAdmin profile data from the backend
     const fetchSuperAdminData = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/superadmin', {
+        const response = await fetch('https://neighborhood-nest-6.onrender.com/superadmins/{super_admin_id}', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -58,7 +58,6 @@ const SuperAdminProfilePage = () => {
     const formData = new FormData();
     formData.append('name', superAdminData.name);
     formData.append('email', superAdminData.email);
-    formData.append('gender', superAdminData.gender);
     formData.append('password', superAdminData.password);
 
     if (superAdminData.profilePicture instanceof File) {
@@ -66,7 +65,7 @@ const SuperAdminProfilePage = () => {
     }
 
     try {
-      const response = await fetch('http://127.0.0.1:5000/superadmin', {
+      const response = await fetch('https://neighborhood-nest-6.onrender.com/superadmins/{super_admin_id}', {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -87,26 +86,26 @@ const SuperAdminProfilePage = () => {
   };
 
   const handleEditClick = () => {
-    setIsEditing(!isEditing); // Toggle between edit and view mode
+    setIsEditing(!isEditing); 
     if (isEditing) {
-      handleSave(); // Save the changes if exiting edit mode
+      handleSave();
     }
   };
 
   const handleExit = () => {
-    navigate('/dashboard/admins'); // Redirect to the default dashboard/admins page
+    navigate('/dashboard/admins'); 
   };
 
   return (
     <div className="SuperAdminProfile w-[1440px] h-[1430px] relative bg-[#cbdae4]">
-      <img className="WhiteAndBlackModernAbstractBeautyLogoRemovebgPreview1 w-[162px] h-[127px] left-0 top-0 absolute" src="https://via.placeholder.com/162x127" alt="Logo" />
+      <img className="WhiteAndBlackModernAbstractBeautyLogoRemovebgPreview1 w-[162px] h-[127px] left-0 top-0 absolute" src={logo} alt="Logo" />
       <div className="Frame482 px-[124px] pt-[52px] pb-[101px] left-0 top-[1069px] absolute border-t border-black justify-center items-center gap-[641px] inline-flex">
         <div className="Frame297 self-stretch flex-col justify-start items-center gap-[39px] inline-flex">
           <div className="Contacts text-[#2d2e2e] text-[32px] font-semibold font-['Inter']">Contacts</div>
           <div className="Frame296 flex-col justify-center items-center gap-4 flex">
             <div className="Frame478 justify-start items-center gap-4 inline-flex">
               <div className="SocialNetwork w-10 h-10 relative" />
-              <div className="3342024792 text-[#2d2e2e] text-base font-normal font-['Inter']">(334) 202-4792</div>
+              <div className="3342024792 text-[#2d2e2e] text-base font-normal font-['Inter']">{/* Add your dynamic phone number here */}</div>
             </div>
             <div className="Frame479 justify-start items-center gap-4 inline-flex">
               <div className="SocialNetwork w-10 h-10 relative" />
@@ -114,7 +113,7 @@ const SuperAdminProfilePage = () => {
             </div>
             <div className="Frame480 justify-start items-center gap-4 inline-flex">
               <div className="IconPack w-5 h-5 relative" />
-              <div className="NeighbornestGmailCom text-[#2d2e2e] text-base font-normal font-['Inter']">neighbornest@gmail.com</div>
+              <div className="NeighbornestGmailCom text-[#2d2e2e] text-base font-normal font-['Inter']">{superAdminData.email}</div>
             </div>
           </div>
         </div>
@@ -128,7 +127,6 @@ const SuperAdminProfilePage = () => {
       <div className="Rectangle6692 w-[1282px] h-[856px] left-[79px] top-[127px] absolute rounded-[10px] border border-black" />
       <div className="FullName left-[423px] top-[417px] absolute opacity-80 text-black text-base font-normal font-['Poppins']">Full Name</div>
       <div className="Email left-[423px] top-[529px] absolute opacity-80 text-black text-base font-normal font-['Poppins']">Email</div>
-      <div className="Gender left-[423px] top-[643px] absolute opacity-80 text-black text-base font-normal font-['Poppins']">Gender</div>
       <div className="Password left-[423px] top-[745px] absolute opacity-80 text-black text-base font-normal font-['Poppins']">Password</div>
       <img className="Ellipse11 w-[100px] h-[100px] left-[423px] top-[287px] absolute rounded-full" src={superAdminData.profilePicture instanceof File ? URL.createObjectURL(superAdminData.profilePicture) : superAdminData.profilePicture} alt="Profile" />
       <div className="Group239179 left-[547px] top-[307px] absolute">
@@ -149,7 +147,6 @@ const SuperAdminProfilePage = () => {
       </div>
       <div className="Rectangle6698 w-[593px] h-[52px] left-[423px] top-[455px] absolute bg-[#f9f9f9] rounded-lg" />
       <div className="Rectangle6694 w-[593px] h-[52px] left-[423px] top-[565px] absolute bg-[#f9f9f9] rounded-lg" />
-      <div className="Rectangle6696 w-[593px] h-[52px] left-[423px] top-[679px] absolute bg-[#f9f9f9] rounded-lg" />
       <div className="Rectangle6699 w-[593px] h-[52px] left-[423px] top-[781px] absolute bg-[#f9f9f9] rounded-lg" />
       {isEditing ? (
         <div className="edit-form">
@@ -166,13 +163,6 @@ const SuperAdminProfilePage = () => {
             value={superAdminData.email}
             onChange={handleChange}
             className="Email left-[423px] top-[529px] absolute opacity-80 text-black text-base font-normal font-['Poppins']"
-          />
-          <input
-            type="text"
-            name="gender"
-            value={superAdminData.gender}
-            onChange={handleChange}
-            className="Gender left-[423px] top-[643px] absolute opacity-80 text-black text-base font-normal font-['Poppins']"
           />
           <input
             type="password"
@@ -193,7 +183,6 @@ const SuperAdminProfilePage = () => {
         <div>
           <div className="BensonKiptoo left-[443px] top-[469px] absolute opacity-40 text-black text-base font-normal font-['Poppins']">{superAdminData.name}</div>
           <div className="BensonkGmailCom left-[443px] top-[581px] absolute opacity-40 text-black text-base font-normal font-['Poppins']">{superAdminData.email}</div>
-          <div className="Male left-[443px] top-[693px] absolute opacity-40 text-black text-base font-normal font-['Poppins']">{superAdminData.gender}</div>
           <div className="Passowrd left-[443px] top-[797px] absolute opacity-40 text-black text-base font-normal font-['Poppins']">{superAdminData.password}</div>
         </div>
       )}
