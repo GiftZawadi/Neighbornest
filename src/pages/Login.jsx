@@ -3,7 +3,6 @@ import logo from '../assets/logo.svg';
 import login from '../assets/login.svg';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { jwtDecode } from 'jwt-decode';
 
 function Login() {
   const navigate = useNavigate();
@@ -32,7 +31,7 @@ function Login() {
   // Fetch user data and handle login
   const fetchUserData = async () => {
     try {
-      const response = await fetch('/api/login', {
+      const response = await fetch('http://127.0.0.1:5000/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -42,19 +41,19 @@ function Login() {
       
       if (response.ok) {
         const data = await response.json();
-        const token = data.token; 
+        console.log("Login response:", data);
+        const token = data.access_token;
+        const userID = data.id; 
+        console.log("User ID:", userID);
+
         localStorage.setItem('jwtToken', token);
+        localStorage.setItem('userID', userID);
 
-        // Decode the JWT token to get the user role
-        const decodedToken = jwtDecode(token);
-        const userRole = decodedToken.role;  
-
-        // Navigate to the appropriate dashboard based on role
-        if (userRole === 'admin') {
+        if (data.role === 'Admin') {
           navigate('/admin-dashboard');
-        } else if (userRole === 'superadmin') {
+        } else if (data.role === 'superadmin') {
           navigate('/superadmin-dashboard');
-        } else if (userRole === 'resident') {
+        } else if (data.role === 'resident') {
           navigate('/resident-dashboard');
         } else {
           toast.error('Unknown user role');
@@ -62,10 +61,11 @@ function Login() {
 
         toast.success('Login successful!');
       } else {
-        throw new Error('Login failed');
+        toast.error('Login failed. Please check your credentials.');
       }
     } catch (error) {
-      toast.error('Failed to login. Please check your credentials.');
+      console.error('Failed to login:', error);
+      toast.error('Failed to login. Please try again.');
     }
   };
 

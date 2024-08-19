@@ -4,19 +4,27 @@ import axios from 'axios';
 
 const AdminDashboardMainContent = () => {
   const [residents, setResidents] = useState([]);
+  const adminId = localStorage.getItem('userID');
 
-  // Fetch residents on component mount
   useEffect(() => {
     const fetchResidents = async () => {
       try {
-        const response = await axios.get('/api/residents');
+        const token = localStorage.getItem('jwtToken');
+        const response = await axios.get(`http://127.0.0.1:5000/admins/${adminId}/residents`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
         setResidents(response.data);
       } catch (error) {
         console.error("Error fetching residents", error);
       }
     };
-    fetchResidents();
-  }, []);
+
+    if (adminId) {
+      fetchResidents();
+    }
+  }, [adminId]);
 
   const handleEdit = (id) => {
     setResidents(residents.map(resident =>
@@ -26,7 +34,13 @@ const AdminDashboardMainContent = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/api/residents/${id}`);
+      const token = localStorage.getItem('jwtToken');
+      await axios.delete(`http://127.0.0.1:5000/admins/${adminId}/residents/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        }
+      });
       setResidents(residents.filter(resident => resident.id !== id));
     } catch (error) {
       console.error("Error deleting resident", error);
@@ -42,7 +56,13 @@ const AdminDashboardMainContent = () => {
   const handleSave = async (id) => {
     const residentToUpdate = residents.find(resident => resident.id === id);
     try {
-      await axios.put(`/api/residents/${id}`, residentToUpdate);
+      const token = localStorage.getItem('jwtToken');
+      await axios.put(`http://127.0.0.1:5000/admins/${adminId}/residents/${id}`, residentToUpdate, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        }
+      });
       setResidents(residents.map(resident =>
         resident.id === id ? { ...resident, isEditing: false } : resident
       ));
