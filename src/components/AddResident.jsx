@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import logo from '../assets/logo.svg';
-import { useNavigate } from 'react-router-dom';
+import { json, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 function AddResident() {
@@ -36,25 +36,30 @@ function AddResident() {
     formData.append('email', email);
     formData.append('password', password);
     formData.append('house_number', houseNumber);
-
+    const finalData = {
+      'name':name,
+      'email':email,
+      'password':password,
+      'house_number':houseNumber
+    }
     try {
       const token = localStorage.getItem('jwtToken');
       const response = await fetch(`http://127.0.0.1:5000/admins/${adminId}/residents`, {
         method: 'POST',
         headers: {
-          'Accept': 'application/json',
+          'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`, // Include token for authorization
         },
-        body: formData,
+        body: JSON.stringify(finalData),
       });
 
+      const data = await response.json(); // Correctly parse the response to JSON
+
       if (response.ok) {
-        const data = await response.json();
         toast.success('Resident added successfully!');
         navigate('/admin-dashboard'); // Redirect to the admin dashboard
       } else {
-        const errorData = await response.json();
-        toast.error(errorData.message || 'Failed to add resident');
+        toast.error(data.message || 'Failed to add resident');
       }
     } catch (error) {
       toast.error('Failed to add resident. Please try again.');
@@ -77,8 +82,8 @@ function AddResident() {
         src={logo}
         alt="Logo"
       />
-      <div className="Frame77 h-[574px] p-6 left-[491px] top-[145px] absolute rounded-xl border border-[#ababab] flex-col justify-start items-start gap-2.5 inline-flex">
-        <div className="Frame69 self-stretch h-[526px] flex-col justify-center items-center gap-6 flex">
+      <div className="Frame77 h-[689px] p-6 left-[491px] top-[87.50px] absolute rounded-xl border border-[#ababab] flex-col justify-start items-start gap-2.5 inline-flex">
+        <div className="Frame69 self-stretch h-[641px] flex-col justify-center items-center gap-6 flex">
           <div className="Login self-stretch text-center text-[#2d2e2e] text-[32px] font-semibold font-['Inter']">Add Resident</div>
 
           {/* Name Input */}
@@ -87,7 +92,7 @@ function AddResident() {
             <div className="Input self-stretch px-4 py-[17px] bg-[#f6f6f6] rounded justify-start items-start gap-2.5 inline-flex">
               <input
                 type="text"
-                placeholder="Enter your name"
+                placeholder="Enter resident name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className={`grow shrink basis-0 text-[#2d2e2e] text-base font-normal font-['Inter'] leading-snug bg-transparent outline-none w-full ${errors.name ? 'border border-red-500' : ''}`}
@@ -102,7 +107,7 @@ function AddResident() {
             <div className="Input self-stretch px-4 py-[17px] bg-[#f6f6f6] rounded justify-start items-start gap-2.5 inline-flex">
               <input
                 type="email"
-                placeholder="Enter your email address"
+                placeholder="Assign resident email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className={`grow shrink basis-0 text-[#2d2e2e] text-base font-normal font-['Inter'] leading-snug bg-transparent outline-none w-full ${errors.email ? 'border border-red-500' : ''}`}
@@ -134,7 +139,7 @@ function AddResident() {
             <div className="Input self-stretch px-4 py-[17px] bg-[#f6f6f6] rounded justify-start items-start gap-2.5 inline-flex">
               <input
                 type="password"
-                placeholder="Enter your password"
+                placeholder="Enter resident password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className={`grow shrink basis-0 text-[#2d2e2e] text-base font-normal font-['Inter'] leading-snug bg-transparent outline-none w-full ${errors.password ? 'border border-red-500' : ''}`}
@@ -143,13 +148,13 @@ function AddResident() {
             {errors.password && <span className="text-red-500 text-sm">{errors.password}</span>}
           </div>
 
-          {/* Add Resident button */}
+          {/* Submit Button */}
           <div
             className="Frame73 self-stretch h-14 flex-col justify-center items-start gap-6 flex cursor-pointer"
             onClick={handleAddResident}
           >
             <div className="Button self-stretch px-[30px] py-[17px] bg-[#264065] rounded justify-center items-center gap-2.5 inline-flex">
-              <div className="ContactUs grow shrink basis-0 text-center text-white text-lg font-medium font-['Inter']">Add Resident</div>
+              <div className="ContactUs grow shrink basis-0 text-center text-white text-lg font-medium font-['Inter']"> Add Resident</div>
             </div>
           </div>
         </div>

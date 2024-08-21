@@ -12,12 +12,21 @@ const AdminDashboardMainContent = () => {
         const token = localStorage.getItem('jwtToken');
         const response = await axios.get(`http://127.0.0.1:5000/admins/${adminId}/residents`, {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         });
-        setResidents(response.data);
+
+        const residentsWithDefaults = response.data.map(resident => ({
+          ...resident,
+          name: resident.name || '',
+          email: resident.email || '',
+          houseNumber: resident.houseNumber || '',
+          isEditing: false, 
+        }));
+
+        setResidents(residentsWithDefaults);
       } catch (error) {
-        console.error("Error fetching residents", error);
+        console.error('Error fetching residents', error);
       }
     };
 
@@ -26,24 +35,24 @@ const AdminDashboardMainContent = () => {
     }
   }, [adminId]);
 
-  const handleEdit = (id) => {
+  const handleEdit = id => {
     setResidents(residents.map(resident =>
       resident.id === id ? { ...resident, isEditing: !resident.isEditing } : resident
     ));
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async id => {
     try {
       const token = localStorage.getItem('jwtToken');
       await axios.delete(`http://127.0.0.1:5000/admins/${adminId}/residents/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-        }
+        },
       });
       setResidents(residents.filter(resident => resident.id !== id));
     } catch (error) {
-      console.error("Error deleting resident", error);
+      console.error('Error deleting resident', error);
     }
   };
 
@@ -53,7 +62,7 @@ const AdminDashboardMainContent = () => {
     ));
   };
 
-  const handleSave = async (id) => {
+  const handleSave = async id => {
     const residentToUpdate = residents.find(resident => resident.id === id);
     try {
       const token = localStorage.getItem('jwtToken');
@@ -61,13 +70,13 @@ const AdminDashboardMainContent = () => {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-        }
+        },
       });
       setResidents(residents.map(resident =>
         resident.id === id ? { ...resident, isEditing: false } : resident
       ));
     } catch (error) {
-      console.error("Error updating resident", error);
+      console.error('Error updating resident', error);
     }
   };
 
@@ -80,7 +89,7 @@ const AdminDashboardMainContent = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {residents.map((resident) => (
-          <div key={resident.id} className="Frame495 h-[339px] p-6 bg-[#f6f6f6] rounded-lg flex-col justify-start items-center gap-4 inline-flex">
+          <div key={resident.id} className="Frame495 h-[339px] p-6 bg-[#ffffff] rounded-lg flex-col justify-start items-center gap-4 inline-flex">
             {resident.isEditing ? (
               <>
                 <input
@@ -102,7 +111,7 @@ const AdminDashboardMainContent = () => {
                   className="border p-2 w-full mb-2"
                 />
                 <button
-                  className="bg-green-500 text-white px-4 py-2 rounded mr-2"
+                  className="bg-264065 text-black px-4 py-2 rounded mr-2"
                   onClick={() => handleSave(resident.id)}
                 >
                   Save
@@ -124,13 +133,13 @@ const AdminDashboardMainContent = () => {
                 <p>House: {resident.houseNumber}</p>
                 <div className="flex mt-4">
                   <button
-                    className="bg-yellow-500 text-white px-4 py-2 rounded mr-2"
+                    className="bg-264065 text-black px-4 py-2 rounded mr-2"
                     onClick={() => handleEdit(resident.id)}
                   >
                     Edit
                   </button>
                   <button
-                    className="bg-red-500 text-white px-4 py-2 rounded"
+                    className="bg-264065 text-black px-4 py-2 rounded"
                     onClick={() => handleDelete(resident.id)}
                   >
                     Delete

@@ -5,7 +5,7 @@ import logo from '../assets/logo.svg';
 
 export default function AdminSidebar() {
   return (
-    <div className="Frame483 w-[245px] h-[864px] relative bg-[#264065]">
+    <div className="Frame483 w-[245px] h-[864px] relative bg-[#264065] ">
   <img className="WhiteAndBlackModernAbstractBeautyLogoRemovebgPreview1 w-[162px] h-[127px] left-0 top-0 absolute" src={logo} alt="Logo" />
   <div className="Frame9 left-[39px] top-[504px] absolute flex-col justify-center items-start gap-6 inline-flex">
     <Link to="/admin-settings" className="Frame7 pl-4 pr-6 py-2 rounded justify-start items-center gap-3 inline-flex cursor-pointer">
