@@ -17,7 +17,7 @@ const SuperAdminProfilePage = () => {
     // Fetch the SuperAdmin profile data from the backend
     const fetchSuperAdminData = async () => {
       try {
-        const response = await fetch('https://neighborhood-nest-6.onrender.com/superadmins/{super_admin_id}', {
+        const response = await fetch('http://127.0.0.1:5000/superadmins/1', { // Replace with actual ID or dynamic parameter
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -49,7 +49,7 @@ const SuperAdminProfilePage = () => {
     if (e.target.files && e.target.files[0]) {
       setSuperAdminData({
         ...superAdminData,
-        profilePicture: e.target.files[0]  // Store the file directly
+        profilePicture: e.target.files[0]
       });
     }
   };
@@ -65,7 +65,7 @@ const SuperAdminProfilePage = () => {
     }
 
     try {
-      const response = await fetch('https://neighborhood-nest-6.onrender.com/superadmins/{super_admin_id}', {
+      const response = await fetch('http://127.0.0.1:5000/superadmins/1', { // Replace with actual ID or dynamic parameter
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -96,9 +96,24 @@ const SuperAdminProfilePage = () => {
     navigate('/dashboard/admins'); 
   };
 
+  // Create an object URL for the profile picture preview
+  const profilePictureURL = superAdminData.profilePicture instanceof File
+    ? URL.createObjectURL(superAdminData.profilePicture)
+    : superAdminData.profilePicture;
+
+  useEffect(() => {
+    // Clean up the object URL when the component unmounts
+    return () => {
+      if (profilePictureURL && !superAdminData.profilePicture instanceof File) {
+        URL.revokeObjectURL(profilePictureURL);
+      }
+    };
+  }, [profilePictureURL, superAdminData.profilePicture]);
+
   return (
     <div className="SuperAdminProfile w-[1440px] h-[1430px] relative bg-[#cbdae4]">
       <img className="WhiteAndBlackModernAbstractBeautyLogoRemovebgPreview1 w-[162px] h-[127px] left-0 top-0 absolute" src={logo} alt="Logo" />
+      
       <div className="Frame482 px-[124px] pt-[52px] pb-[101px] left-0 top-[1069px] absolute border-t border-black justify-center items-center gap-[641px] inline-flex">
         <div className="Frame297 self-stretch flex-col justify-start items-center gap-[39px] inline-flex">
           <div className="Contacts text-[#2d2e2e] text-[32px] font-semibold font-['Inter']">Contacts</div>
@@ -125,67 +140,71 @@ const SuperAdminProfilePage = () => {
         </div>
       </div>
       <div className="Rectangle6692 w-[1282px] h-[856px] left-[79px] top-[127px] absolute rounded-[10px] border border-black" />
-      <div className="FullName left-[423px] top-[417px] absolute opacity-80 text-black text-base font-normal font-['Poppins']">Full Name</div>
-      <div className="Email left-[423px] top-[529px] absolute opacity-80 text-black text-base font-normal font-['Poppins']">Email</div>
-      <div className="Password left-[423px] top-[745px] absolute opacity-80 text-black text-base font-normal font-['Poppins']">Password</div>
-      <img className="Ellipse11 w-[100px] h-[100px] left-[423px] top-[287px] absolute rounded-full" src={superAdminData.profilePicture instanceof File ? URL.createObjectURL(superAdminData.profilePicture) : superAdminData.profilePicture} alt="Profile" />
+
+      <img className="Ellipse11 w-[100px] h-[100px] left-[423px] top-[287px] absolute rounded-full" src={profilePictureURL} alt="Profile" />
+      
       <div className="Group239179 left-[547px] top-[307px] absolute">
         <div className="BensonKiptoo left-0 top-0 absolute text-black text-xl font-medium font-['Poppins']">{superAdminData.name}</div>
         <div className="BensonkGmailCom left-0 top-[36px] absolute opacity-50 text-black text-base font-normal font-['Poppins']">{superAdminData.email}</div>
       </div>
+
       <div className="Group47736 w-[93px] h-11 left-[1236px] top-[287px] absolute">
         <div className="Rectangle1072 w-[93px] h-11 left-0 top-0 absolute bg-[#4182f9] rounded-lg" />
         <div onClick={handleEditClick} className="Edit left-[32px] top-[10px] absolute text-white text-base font-normal font-['Poppins'] cursor-pointer">
           {isEditing ? 'Save' : 'Edit'}
         </div>
       </div>
+      
       <div className="Group239182 w-[93px] h-11 left-[425px] top-[899px] absolute">
         <div className="Rectangle1072 w-[93px] h-11 left-0 top-0 absolute bg-[#4182f9] rounded-lg" />
         <div onClick={handleExit} className="Save left-[32px] top-[10px] absolute text-white text-base font-normal font-['Poppins'] cursor-pointer">
           Exit
         </div>
       </div>
-      <div className="Rectangle6698 w-[593px] h-[52px] left-[423px] top-[455px] absolute bg-[#f9f9f9] rounded-lg" />
-      <div className="Rectangle6694 w-[593px] h-[52px] left-[423px] top-[565px] absolute bg-[#f9f9f9] rounded-lg" />
-      <div className="Rectangle6699 w-[593px] h-[52px] left-[423px] top-[781px] absolute bg-[#f9f9f9] rounded-lg" />
+      
       {isEditing ? (
         <div className="edit-form">
-          <input
-            type="text"
-            name="name"
-            value={superAdminData.name}
-            onChange={handleChange}
-            className="FullName left-[423px] top-[417px] absolute opacity-80 text-black text-base font-normal font-['Poppins']"
-          />
-          <input
-            type="email"
-            name="email"
-            value={superAdminData.email}
-            onChange={handleChange}
-            className="Email left-[423px] top-[529px] absolute opacity-80 text-black text-base font-normal font-['Poppins']"
-          />
-          <input
-            type="password"
-            name="password"
-            value={superAdminData.password}
-            onChange={handleChange}
-            className="Password left-[423px] top-[745px] absolute opacity-80 text-black text-base font-normal font-['Poppins']"
-          />
-          <input
-            type="file"
-            name="profilePicture"
-            accept="image/*"
-            onChange={handleProfilePictureChange}
-            className="ProfilePictureUpload left-[423px] top-[835px] absolute"
-          />
+          <label className="FullName left-[423px] top-[400px] absolute opacity-80 text-black text-base font-normal font-['Poppins']">
+            Full Name
+            <input
+              type="text"
+              name="name"
+              value={superAdminData.name}
+              onChange={handleChange}
+              className="absolute opacity-80 text-black text-base font-normal font-['Poppins'] w-[593px] h-[52px] p-2 mt-1 rounded-lg"
+            />
+          </label>
+          <label className="Email left-[423px] top-[470px] absolute opacity-80 text-black text-base font-normal font-['Poppins']">
+            Email
+            <input
+              type="email"
+              name="email"
+              value={superAdminData.email}
+              onChange={handleChange}
+              className="absolute opacity-80 text-black text-base font-normal font-['Poppins'] w-[593px] h-[52px] p-2 mt-1 rounded-lg"
+            />
+          </label>
+          <label className="Password left-[423px] top-[540px] absolute opacity-80 text-black text-base font-normal font-['Poppins']">
+            Password
+            <input
+              type="password"
+              name="password"
+              value={superAdminData.password}
+              onChange={handleChange}
+              className="absolute opacity-80 text-black text-base font-normal font-['Poppins'] w-[593px] h-[52px] p-2 mt-1 rounded-lg"
+            />
+          </label>
+          <label className="ProfilePicture left-[423px] top-[610px] absolute opacity-80 text-black text-base font-normal font-['Poppins']">
+            Profile Picture
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleProfilePictureChange}
+              className="absolute opacity-80 text-black text-base font-normal font-['Poppins'] w-[593px] h-[52px] p-2 mt-1 rounded-lg"
+            />
+          </label>
         </div>
-      ) : (
-        <div>
-          <div className="BensonKiptoo left-[443px] top-[469px] absolute opacity-40 text-black text-base font-normal font-['Poppins']">{superAdminData.name}</div>
-          <div className="BensonkGmailCom left-[443px] top-[581px] absolute opacity-40 text-black text-base font-normal font-['Poppins']">{superAdminData.email}</div>
-          <div className="Passowrd left-[443px] top-[797px] absolute opacity-40 text-black text-base font-normal font-['Poppins']">{superAdminData.password}</div>
-        </div>
-      )}
+      ) : null}
     </div>
   );
 };

@@ -24,13 +24,11 @@ import AdminProfile from './components/AdminProfile';
 import AddEvent from './components/AddEvent';
 import AddNews from './components/AddNews';
 import AddResident from './components/AddResident';
-import HomePage from './pages/HomePage';
 
 function App() {
   return (
     <Router>
-      <Routes>         
-        <Route path="/" element={<Navigate to="/dashboard" />} />
+      <Routes>
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/dashboard/*" element={<Dashboard />} />

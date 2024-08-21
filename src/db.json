@@ -1,43 +1,85 @@
 {
-    "superadmin": {
-      "id": 1,
-      "name": "Benson Kiptoo",
-      "email": "bensonk@gmail.com",
-      "gender": "Male",
-      "password": "password123",
-      "profilePicture": "https://via.placeholder.com/100x100",
-      "neighborhoods": [
-        {
-          "id": 1,
-          "name": "Kilimani",
-          "location": "Nairobi",
-          "image": "https://via.placeholder.com/200"
-        },
-        {
-          "id": 2,
-          "name": "Westlands",
-          "location": "Nairobi",
-          "image": "https://via.placeholder.com/200"
-        }
-      ],
-      "admins": [
-        {
-          "id": 1,
-          "name": "Lora Smith",
-          "email": "lorasmith@riaraapt.com",
-          "password": "password123",
-          "neighborhood": "Riara Apartments",
-          "profilePicture": "https://via.placeholder.com/56x56"
-        },
-        {
-          "id": 2,
-          "name": "John Doe",
-          "email": "johndoe@example.com",
-          "password": "password123",
-          "neighborhood": "Westlands",
-          "profilePicture": "https://via.placeholder.com/56x56"
-        }
-      ]
+  "admins": [
+    {
+      "id": "c666",
+      "name": "mercy",
+      "email": "mercy2@gmail.com",
+      "password": "1234",
+      "neighborhood_name": "Runda apartments",
+      "profile_image_url": "blob:http://localhost:3000/cb54df50-a6d9-4d79-bcb9-dca74eed3694"
+    },
+    {
+      "id": "76d7",
+      "name": "Jonathan",
+      "email": "jonaadmin@example.com",
+      "password": "123456789",
+      "neighborhood_name": "Kilimani Apartments",
+      "profile_image_url": "blob:http://localhost:3000/fa741f6e-080c-4022-9a7c-8b45ecf2f07e"
+    },
+    {
+      "id": "53e3",
+      "name": "mercy",
+      "email": "princess@gmail.com",
+      "password": "er",
+      "neighborhood_name": "KAREN",
+      "profile_image_url": "blob:http://localhost:3000/4fba4a9e-7319-498d-ab95-37c01e0972b9"
     }
-  }
-  
+  ],
+  "neighborhoods": [
+    {
+      "id": "7c84",
+      "name": "Runda apartments",
+      "location": "NAIROBI COUNTY",
+      "image_url": "blob:http://localhost:3000/04657daf-52d5-42e1-a9f3-6f92512d7c97"
+    },
+    {
+      "id": "a1a0",
+      "name": "Kilimani Apartments",
+      "location": "Kilimani",
+      "image_url": "blob:http://localhost:3000/fb6ca08d-e7ec-4cf1-8227-62efd39f19e9"
+    },
+    {
+      "id": "b709",
+      "name": "KAREN",
+      "location": "NAIROBI COUNTY",
+      "image_url": "blob:http://localhost:3000/bf4c9359-106c-4a55-83cb-21f27029e996"
+    }
+  ],
+  "messages": [
+    {
+      "id": "6af3",
+      "name": "mercy",
+      "email": "princess@gmail.com",
+      "service": "events",
+      "message": "Hey"
+    },
+    {
+      "id": "3ee9",
+      "name": "jakes",
+      "email": "princess@gmail.com",
+      "service": "events",
+      "message": "hii"
+    },
+    {
+      "id": "073d",
+      "name": "jakes",
+      "email": "princess@gmail.com",
+      "service": "web-design",
+      "message": "hi"
+    },
+    {
+      "id": "42b4",
+      "name": "jakes",
+      "email": "sarah@example.com",
+      "service": "events",
+      "message": "hey"
+    },
+    {
+      "id": "285a",
+      "name": "Jakes",
+      "email": "jakes2024@gmail.com",
+      "service": "EVENTS",
+      "message": "Hey i am not content with the events"
+    }
+  ]
+}

@@ -3,13 +3,11 @@ import logo from '../assets/logo.svg';
 import login from '../assets/login.svg';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { jwtDecode } from 'jwt-decode';
 
 function Login() {
   const navigate = useNavigate();
 
   // State variables for form inputs and validation
-  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({}); // To store validation errors
@@ -20,7 +18,6 @@ function Login() {
   // Form validation
   const validateForm = () => {
     let formErrors = {};
-    if (!name) formErrors.name = 'Name is required';
     if (!email) formErrors.email = 'Email is required';
     else if (!emailRegex.test(email)) formErrors.email = 'Invalid email format';
     if (!password) formErrors.password = 'Password is required';
@@ -32,45 +29,47 @@ function Login() {
   // Fetch user data and handle login
   const fetchUserData = async () => {
     try {
-      const response = await fetch('/api/login', {
+      const response = await fetch('http://127.0.0.1:5000/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ email, password }), // Only send email and password
       });
       
       if (response.ok) {
         const data = await response.json();
-        const token = data.token; 
+        const token = data.access_token;
+        const userID = data.id;
+
         localStorage.setItem('jwtToken', token);
+        localStorage.setItem('userID', userID);
 
-        // Decode the JWT token to get the user role
-        const decodedToken = jwtDecode(token);
-        const userRole = decodedToken.role;  
-
-        // Navigate to the appropriate dashboard based on role
-        if (userRole === 'admin') {
+        // Navigate based on role
+        if (data.role === 'Admin') {
           navigate('/admin-dashboard');
-        } else if (userRole === 'superadmin') {
-          navigate('/superadmin-dashboard');
-        } else if (userRole === 'resident') {
-          navigate('/resident-dashboard');
+        } else if (data.role === 'SuperAdmin') {
+          navigate('/dashboard');
+        } else if (data.role === 'Resident') {
+          navigate('/resident/dashboard');
         } else {
           toast.error('Unknown user role');
         }
 
         toast.success('Login successful!');
       } else {
-        throw new Error('Login failed');
+        const errorData = await response.json();
+        toast.error(errorData.error || 'Login failed. Please check your credentials.');
       }
     } catch (error) {
-      toast.error('Failed to login. Please check your credentials.');
+      console.error('Failed to login:', error);
+      toast.error('Failed to login. Please try again.');
     }
   };
 
   // Handle form submission
-  const handleLogin = () => {
+  const handleLogin = (e) => {
+    e.preventDefault(); // Prevent page reload
     if (validateForm()) {
       fetchUserData();
     } else {
@@ -91,21 +90,6 @@ function Login() {
             <img src={login} alt="login" className="absolute inset-0 w-full h-full" />
           </div>
           <div className="Login self-stretch text-center text-[#2d2e2e] text-[32px] font-semibold font-['Inter']">Login</div>
-          
-          {/* Name Input */}
-          <div className="Frame66 self-stretch h-[91px] flex-col justify-start items-start gap-4 flex">
-            <div className="Name self-stretch text-[#2d2e2e] text-base font-semibold font-['Inter']">Name</div>
-            <div className="Input self-stretch px-4 py-[17px] bg-[#f6f6f6] rounded justify-start items-start gap-2.5 inline-flex">
-              <input
-                type="text"
-                placeholder="Enter your name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className={`grow shrink basis-0 text-[#2d2e2e] text-base font-normal font-['Inter'] leading-snug bg-transparent outline-none w-full ${errors.name ? 'border border-red-500' : ''}`}
-              />
-            </div>
-            {errors.name && <span className="text-red-500 text-sm">{errors.name}</span>}
-          </div>
           
           {/* Email Input */}
           <div className="Frame74 self-stretch h-[91px] flex-col justify-start items-start gap-4 flex">

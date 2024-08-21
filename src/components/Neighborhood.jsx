@@ -4,55 +4,56 @@ const Neighborhood = () => {
   const [neighborhoods, setNeighborhoods] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [currentNeighborhood, setCurrentNeighborhood] = useState({
-    id: null,
     name: '',
     location: '',
-    image: ''
+    image_url: ''
   });
   const [imageFile, setImageFile] = useState(null);
 
-  const superAdminId = 1; // Assuming the super admin ID is 1, update as needed
-
+  // Fetch neighborhoods from the JSON server when the component mounts
   useEffect(() => {
-    // Fetch neighborhoods from the backend when the component mounts
-    fetch(`https://neighborhood-nest-6.onrender.com/superadmins/${superAdminId}/neighborhoods`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
-      .then(response => {
+    const fetchNeighborhoods = async () => {
+      try {
+        const response = await fetch('http://localhost:5001/neighborhoods');
+
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error('Failed to fetch neighborhoods');
         }
-        return response.json();
-      })
-      .then(data => setNeighborhoods(data))
-      .catch(error => console.error('Error fetching neighborhoods:', error));
-  }, [superAdminId]);
+
+        const data = await response.json();
+        if (Array.isArray(data)) {
+          setNeighborhoods(data);
+        } else {
+          console.error('Expected an array of neighborhoods but got:', data);
+          setNeighborhoods([]);
+        }
+      } catch (error) {
+        console.error('Error fetching neighborhoods:', error);
+      }
+    };
+
+    fetchNeighborhoods();
+  }, []);
 
   const handleAddNeighborhoodClick = () => {
-    setCurrentNeighborhood({ id: null, name: '', location: '', image: '' });
+    setCurrentNeighborhood({ name: '', location: '', image_url: '' });
     setImageFile(null);
     setIsEditing(true);
   };
 
   const handleEditClick = (neighborhood) => {
     setCurrentNeighborhood(neighborhood);
-    setImageFile(null);
+    setImageFile(null); // Reset the image file input when editing
     setIsEditing(true);
   };
 
   const handleDeleteClick = async (id) => {
     try {
-      const response = await fetch(`https://neighborhood-nest-6.onrender.com/superadmins/${superAdminId}/neighborhoods/${id}`, {
+      const response = await fetch(`http://localhost:5001/neighborhoods/${id}`, {
         method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        },
       });
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error('Failed to delete neighborhood');
       }
       setNeighborhoods(neighborhoods.filter(neighborhood => neighborhood.id !== id));
     } catch (error) {
@@ -61,37 +62,43 @@ const Neighborhood = () => {
   };
 
   const handleSaveClick = async () => {
-    const formData = new FormData();
-    formData.append('name', currentNeighborhood.name);
-    formData.append('location', currentNeighborhood.location);
-    if (imageFile) {
-      formData.append('image', imageFile);
-    }
-
     try {
+      const formData = new FormData();
+      formData.append('name', currentNeighborhood.name);
+      formData.append('location', currentNeighborhood.location);
+      if (imageFile) {
+        formData.append('image_url', imageFile.name); // For JSON server, you might use the file name or a static URL
+      }
+
       let response;
       if (currentNeighborhood.id) {
         // Update neighborhood
-        response = await fetch(`https://neighborhood-nest-6.onrender.com/superadmins/${superAdminId}/neighborhoods/${currentNeighborhood.id}`, {
+        response = await fetch(`http://localhost:5001/neighborhoods/${currentNeighborhood.id}`, {
           method: 'PUT',
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
           },
-          body: formData,
+          body: JSON.stringify({
+            ...currentNeighborhood,
+            image_url: imageFile ? URL.createObjectURL(imageFile) : currentNeighborhood.image_url
+          }),
         });
       } else {
         // Add new neighborhood
-        response = await fetch(`https://neighborhood-nest-6.onrender.com/superadmins/${superAdminId}/neighborhoods`, {
+        response = await fetch('http://localhost:5001/neighborhoods', {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
           },
-          body: formData,
+          body: JSON.stringify({
+            ...currentNeighborhood,
+            image_url: imageFile ? URL.createObjectURL(imageFile) : currentNeighborhood.image_url
+          }),
         });
       }
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error('Failed to save neighborhood');
       }
 
       const data = await response.json();
@@ -102,7 +109,7 @@ const Neighborhood = () => {
       }
 
       setIsEditing(false);
-      setCurrentNeighborhood({ id: null, name: '', location: '', image: '' });
+      setCurrentNeighborhood({ name: '', location: '', image_url: '' });
       setImageFile(null);
     } catch (error) {
       console.error('Error saving neighborhood:', error);
@@ -131,8 +138,8 @@ const Neighborhood = () => {
       <div className="grid grid-cols-3 gap-6">
         {neighborhoods.map(neighborhood => (
           <div key={neighborhood.id} className="CardArticle w-full bg-white rounded-lg flex-col justify-center items-center p-4">
-            <div className="Thumbnail h-[200px] rounded flex-col justify-center items-center flex">
-              <img className="Thumbnail self-stretch grow shrink basis-0" src={neighborhood.image} alt={neighborhood.name} />
+            <div className="Thumbnail h-[150px] w-[150px] rounded flex-col justify-center items-center flex">
+              <img className="Thumbnail h-full w-full object-cover rounded" src={neighborhood.image_url} alt={neighborhood.name} />
             </div>
             <div className="BodyContent self-stretch pt-6 pb-4 bg-white flex-col justify-center items-start gap-[26px] flex">
               <div className="TagTitle self-stretch h-[62px] flex-col justify-start items-start gap-5 flex">
@@ -142,8 +149,16 @@ const Neighborhood = () => {
                 </div>
               </div>
               <div className="actions flex justify-between">
-                <button onClick={() => handleEditClick(neighborhood)} className="edit-btn text-blue-500">Edit</button>
-                <button onClick={() => handleDeleteClick(neighborhood.id)} className="delete-btn text-red-500">Delete</button>
+                <button 
+                  onClick={() => handleEditClick(neighborhood)} 
+                  className="edit-btn text-white bg-green-500 py-1 px-3 rounded">
+                  Edit
+                </button>
+                <button 
+                  onClick={() => handleDeleteClick(neighborhood.id)} 
+                  className="delete-btn text-white bg-red-500 py-1 px-3 rounded">
+                  Delete
+                </button>
               </div>
             </div>
           </div>

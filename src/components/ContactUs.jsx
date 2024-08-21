@@ -44,7 +44,7 @@ const ContactUs = () => {
 
     // Submitting the form data to the backend
     try {
-      const response = await fetch('https://neighborhood-nest-6.onrender.com/superadmins/1/messages', {
+      const response = await fetch('http://localhost:5001/messages', { // Update the URL here
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ const ContactUs = () => {
         throw new Error('Failed to send message');
       }
 
-      setFormSuccess('Your submission was successful!');
+      setFormSuccess('Message submitted successfully!');
       setFormData({ name: '', email: '', service: '', message: '' });
     } catch (error) {
       setFormError('Failed to send message. Please try again later.');
@@ -111,7 +111,7 @@ const ContactUs = () => {
         <div className="Frame95 flex-col justify-start items-start gap-[54px] inline-flex">
           <div className="Frame82 flex-col justify-start items-start gap-5 flex">
             <div className="LetSTalk text-black text-[64px] font-bold font-['Noe Display']">Let’s Talk</div>
-            <div className="HaveSomeBigIdeaOrBrandToDevelopAndNeedHelpThenReachOutWeDLoveToHearAboutYourProjectAndProvideHelp w-[538px] text-black text-xl font-normal font-['Poppins']">Have some big idea or brand to develop and need help? Then reach out we'd love to hear about your project  and provide help</div>
+            <div className="HaveSomeBigIdeaOrBrandToDevelopAndNeedHelpThenReachOutWeDLoveToHearAboutYourProjectAndProvideHelp w-[538px] text-black text-xl font-normal font-['Poppins']">Have some big idea or brand to develop and need help? Then reach out we'd love to hear about your project and provide help</div>
           </div>
           <div className="Frame81 flex-col justify-start items-start gap-5 flex">
             <div className="Email text-black text-[32px] font-bold font-['Noe Display']">Email</div>
@@ -154,39 +154,40 @@ const ContactUs = () => {
                 placeholder="Enter your email"
               />
             </div>
-            <div className="Frame92 h-[82px] flex-col justify-start items-start gap-[15px] flex">
-              <div className="WhatServiceAreYouInterestedIn text-black text-sm font-normal font-['Poppins']">What service are you interested in</div>
+            <div className="Frame85 flex-col justify-start items-start gap-[15px] flex">
+              <div className="Service text-black text-sm font-normal font-['Poppins']">Service</div>
               <input
-                className="Frame90 self-stretch px-4 py-[11px] bg-[#f6f6f6] w-[563px]"
+                className="Rectangle52 w-[563px] h-[46px] bg-[#f6f6f6] px-4"
                 type="text"
                 name="service"
                 value={formData.service}
                 onChange={handleChange}
-                placeholder="Select project type"
+                placeholder="Enter the service"
               />
             </div>
-            <div className="Frame87 flex-col justify-start items-start gap-[15px] flex">
+            <div className="Frame86 flex-col justify-start items-start gap-[15px] flex">
               <div className="Message text-black text-sm font-normal font-['Poppins']">Message</div>
               <textarea
-                className="Rectangle52 w-[563px] h-[165px] bg-[#f6f6f6] px-4 py-2"
+                className="Rectangle52 w-[563px] h-[120px] bg-[#f6f6f6] px-4"
                 name="message"
                 value={formData.message}
                 onChange={handleChange}
                 placeholder="Enter your message"
-              ></textarea>
+              />
             </div>
-            <div className="Frame93 px-[246px] py-[13px] bg-black justify-start items-start gap-2.5 inline-flex">
-              <button type="submit" className="Submit text-white text-xl font-medium font-['Poppins']">
-                Submit
-              </button>
-            </div>
-            {formError && <p className="text-red-500 mt-4">{formError}</p>}
-            {formSuccess && <p className="text-green-500 mt-4">{formSuccess}</p>}
+            {formError && <div className="text-red-600">{formError}</div>}
+            {formSuccess && <div className="text-green-600">{formSuccess}</div>}
+            <button
+              className="Rectangle53 w-[563px] h-[46px] bg-[#cfebf9] text-black font-normal font-['Poppins']"
+              type="submit"
+            >
+              Send
+            </button>
           </form>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default ContactUs;

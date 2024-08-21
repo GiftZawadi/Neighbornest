@@ -43,16 +43,34 @@ function HomePage() {
       src={logo}
       alt="Logo"
     />
-    <div className="Frame3 self-stretch justify-end items-center gap-10 inline-flex">
-      <Link className="Home w-[48.41px] text-black text-sm font-normal font-['Rubik']">Home</Link>
-      <Link className="AboutUs w-[74.48px] text-black text-sm font-normal font-['Rubik']">About Us</Link>
-      <Link className="ContactUs w-[76px] text-black text-sm font-normal font-['Rubik']">Contact Us</Link>
-      <div className="Frame2 h-[43px] px-6 py-[13px] bg-[#cfebf9] rounded-xl justify-start items-start gap-2.5 flex cursor-pointer"
-        onClick={handleLoginRedirect}>
-        <div className="Login text-black text-sm font-normal font-['Rubik']">Login </div>
+   <div className="Frame3 self-stretch justify-end items-center gap-10 inline-flex">
+      <Link 
+        to="/" 
+        className="Home w-[48.41px] text-black text-sm font-normal font-['Rubik']"
+      >
+        Home
+      </Link>
+      <Link 
+        to="/about-us" 
+        className="AboutUs w-[74.48px] text-black text-sm font-normal font-['Rubik']"
+      >
+        About Us
+      </Link>
+      <Link 
+        to="/contact-us" 
+        className="ContactUs w-[76px] text-black text-sm font-normal font-['Rubik']"
+      >
+        Contact Us
+      </Link>
+      <div 
+        className="Frame2 h-[43px] px-6 py-[13px] bg-[#cfebf9] rounded-xl justify-start items-start gap-2.5 flex cursor-pointer"
+        onClick={handleLoginRedirect}
+      >
+        <div className="Login text-black text-sm font-normal font-['Rubik']">Login</div>
       </div>
     </div>
   </div>
+  
   <div className="Group239182 w-[1298px] h-[541px] left-[71px] top-[1576px] absolute">
     <div className="WhatOurClientsSay left-[4px] top-0 absolute text-black text-5xl font-normal font-['Merriweather'] leading-[72px]">What Our Clients Say</div>
     <div className="Group17 w-[1298px] h-[363px] left-0 top-[178px] absolute">
