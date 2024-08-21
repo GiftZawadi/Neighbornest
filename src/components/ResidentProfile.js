@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import logo from '../assets/logo.svg';
 
 const ResidentProfile = () => {
-  // State to manage the form input and edit mode
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     name: 'Benson Kiptoo',
@@ -10,7 +10,6 @@ const ResidentProfile = () => {
     houseNumber: 'House number',
   });
 
-  // Handler for form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -19,15 +18,13 @@ const ResidentProfile = () => {
     });
   };
 
-  // Handler for toggling edit mode
   const handleEditClick = () => {
     setIsEditing(!isEditing);
   };
 
-  // Handler for saving changes (e.g., you could add an API call here)
   const handleSaveClick = () => {
     setIsEditing(false);
-    // Implement save logic here (e.g., send formData to an API)
+    // Implement save logic here
     console.log('Saved data:', formData);
   };
 
@@ -35,7 +32,7 @@ const ResidentProfile = () => {
     <div className="w-[1440px] h-[1430px] relative bg-[#cbdae4]">
       <img 
         className="absolute left-0 top-0 w-[162px] h-[127px]" 
-        src="https://via.placeholder.com/162x127" 
+        src={logo} 
         alt="Logo" 
       />
 
@@ -144,7 +141,7 @@ const ResidentProfile = () => {
 
       <div className="absolute top-[1069px] left-0 px-[124px] pt-[52px] pb-[101px] border-t border-black">
         <div className="text-[#2d2e2e] text-[32px] font-semibold font-['Inter']">Contacts</div>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 mt-4">
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 relative"></div>
             <div className="text-[#2d2e2e] text-base font-normal font-['Inter']">(334) 202-4792</div>

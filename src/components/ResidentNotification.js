@@ -1,5 +1,6 @@
 // ResidentNotification.js
 import React from 'react';
+import logo from '../assets/logo.svg'; 
 
 const notifications = [
   {
@@ -37,42 +38,46 @@ const notifications = [
 const ResidentNotification = () => {
   return (
     <div className="relative w-full max-w-[1440px] h-[1068px] bg-[#cbdae4]">
-      <img 
-        className="absolute top-0 left-0 w-[162px] h-[127px]" 
-        src="https://via.placeholder.com/162x127" 
-        alt="Logo" 
+      <img
+        className="absolute top-0 left-0 w-[162px] h-[127px] object-cover"
+        src={logo}
+        alt="Logo"
       />
-      <div className="absolute top-[127px] left-[79px] w-[1282px] h-[856px] bg-white rounded-lg border border-black" />
-      <div className="absolute top-[159px] left-[134px] w-9 h-9">
-        <div className="w-7 h-7 bg-gray-200 rounded-full" />
-      </div>
-      <div className="absolute top-[270px] left-[148px] w-[796px] h-[675.36px]">
-        {notifications.map((notification) => (
-          <div key={notification.id} className="relative mb-4 border-b border-[#dddddd] p-5 bg-white rounded-lg">
-            <div className="absolute top-0 right-0 w-5 h-5 bg-gray-200 rounded-full">
-              {/* Dismiss icon here */}
-            </div>
-            <div className="flex gap-4">
-              <div className="w-[59.70px] h-[59.70px] bg-[#dddddd] rounded-full flex items-center justify-center">
-                <img 
-                  className="w-[59.70px] h-[59.70px] rounded-full" 
-                  src={notification.avatar} 
-                  alt="Avatar" 
-                />
-              </div>
-              <div className="flex flex-col flex-1">
-                <div className="text-[#222222] text-lg font-semibold leading-snug">
-                  {notification.message}
-                </div>
-                <div className="text-[#717171] text-base font-normal leading-snug mt-2">
-                  {notification.date}
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-        <div className="absolute top-0 left-0 text-black text-[39.80px] font-semibold leading-[44.77px]">
+      <div className="absolute top-[127px] left-[79px] w-[1282px] h-[856px] bg-white rounded-lg border border-black shadow-lg">
+        <div className="absolute top-0 left-0 p-5 text-black text-[39.80px] font-semibold">
           Notifications
+        </div>
+        <div className="absolute top-[159px] left-[134px] w-9 h-9 bg-gray-200 rounded-full">
+          {/* Add your icon here */}
+        </div>
+        <div className="pt-[100px] pl-[50px] pr-[50px]">
+          {notifications.map((notification) => (
+            <div
+              key={notification.id}
+              className="relative mb-4 border-b border-[#dddddd] p-5 bg-white rounded-lg shadow-md"
+            >
+              <div className="absolute top-2 right-2 w-5 h-5 bg-gray-200 rounded-full">
+                {/* Dismiss icon */}
+              </div>
+              <div className="flex gap-4">
+                <div className="w-[60px] h-[60px] bg-[#dddddd] rounded-full flex items-center justify-center">
+                  <img
+                    className="w-[60px] h-[60px] rounded-full object-cover"
+                    src={notification.avatar}
+                    alt="Avatar"
+                  />
+                </div>
+                <div className="flex flex-col flex-1">
+                  <div className="text-[#222222] text-lg font-semibold leading-snug">
+                    {notification.message}
+                  </div>
+                  <div className="text-[#717171] text-base font-normal mt-2">
+                    {notification.date}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

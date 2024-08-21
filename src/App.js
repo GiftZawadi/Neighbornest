@@ -18,14 +18,36 @@ import AddEvent from './components/AddEvent';
 import AddNews from './components/AddNews';
 import AddResident from './components/AddResident';
 import HomePage from './pages/HomePage';
+import ResidentLayout from './components/ResidentLayout';
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/resident/dashboard" element={<ResidentDashboard />} />
-        <Route path="/resident/events" element={<ResidentEvents />} />
-        <Route path="/resident/news" element={<ResidentNews />} />
+        <Route
+          path="/resident/dashboard"
+          element={
+            <ResidentLayout>
+              <ResidentDashboard />
+            </ResidentLayout>
+          }
+        /> 
+        <Route
+          path="/resident/events"
+          element={
+            <ResidentLayout>
+              <ResidentEvents />
+            </ResidentLayout>
+          }
+        /> 
+        <Route
+          path="/resident/news"
+          element={
+            <ResidentLayout>
+              <ResidentNews />
+            </ResidentLayout>
+          }
+        /> 
         <Route path="/resident/profile" element={<ResidentProfile />} />
         <Route path="/resident/notifications" element={<ResidentNotification />} />
         <Route path="/" element={<HomePage />} />

@@ -1,38 +1,54 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import ResidentNewsCard from './ResidentNewsCard';
-import ResidentNewsForm from './ResidentNewsForm';
-import ResidentLayout from './ResidentLayout';
 
-const ResidentNews = () => {
-  const [isFormVisible, setFormVisible] = useState(false);
+const ResidentNews = ({ residentId }) => {
+  const [news, setNews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const handleAddNewsClick = () => {
-    setFormVisible(!isFormVisible);
-  };
+  useEffect(() => {
+    if (!residentId) {
+      setError('Resident ID is undefined. Cannot load news.');
+      setLoading(false);
+      return;
+    }
 
-  const handleCloseForm = () => {
-    setFormVisible(false);
-  };
+    const fetchNews = async () => {
+      try {
+        const token = localStorage.getItem('jwtToken');
+        const response = await axios.get(`http://localhost:5000/residents/${residentId}/news`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setNews(response.data);
+        setError(null);
+      } catch (err) {
+        setError('Failed to fetch news');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNews();
+  }, [residentId]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
-    <ResidentLayout showSidebar={!isFormVisible}>
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">News</h1>
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-          onClick={handleAddNewsClick}
-        >
-          {isFormVisible ? 'Back to News' : 'Add News'}
-        </button>
-      </div>
-
-      {/* Conditionally render the form or news cards */}
-      {isFormVisible ? (
-        <ResidentNewsForm onClose={handleCloseForm} />
-      ) : (
-        <ResidentNewsCard />
-      )}
-    </ResidentLayout>
+    <div>
+      {news.map((newsItem) => (
+        <ResidentNewsCard key={newsItem.id} newsItem={newsItem} />
+      ))}
+      <button onClick={() => setNews((prevNews) => [
+        ...prevNews,
+        { id: Date.now(), title: 'New News', content: 'Description here', imageUrl: '', created_at: new Date().toISOString() },
+      ])}>
+        + Add News
+      </button>
+    </div>
   );
 };
 

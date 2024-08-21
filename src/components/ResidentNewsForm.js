@@ -1,112 +1,94 @@
 import React, { useState } from 'react';
 
-const ResidentNewsForm = ({ onClose }) => {
-  const [formData, setFormData] = useState({
-    title: '',
-    content: '',
-    imageUrl: '',
-  });
+const ResidentNewsForm = ({ residentId, onSubmit }) => {
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [image, setImage] = useState(null);
 
-  // Handle input changes
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+    const handleImageChange = (e) => {
+        setImage(e.target.files[0]);
+    };
 
-  // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-    // You can add form validation here
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('description', description);
+        if (image) {
+            formData.append('image', image);
+        }
 
-    // Submit the form data
-    console.log('Form submitted:', formData);
+        try {
+            const response = await fetch(`http://localhost:3001/residents/${residentId}/news`, {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+                },
+                body: formData,
+            });
 
-    // Optionally, clear the form or close the form
-    setFormData({
-      title: '',
-      content: '',
-      imageUrl: '',
-    });
+            if (response.ok) {
+                const newNews = await response.json();
+                onSubmit(newNews);
+            } else {
+                const errorData = await response.json();
+                console.error('Error submitting news:', errorData.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
 
-    // Call onClose if provided
-    if (onClose) {
-      onClose();
-    }
-  };
-
-  return (
-    <div className="AddNews w-full h-screen relative bg-[#cbdae4]">
-      <img
-        className="WhiteAndBlackModernAbstractBeautyLogoRemovebgPreview1 w-[162px] h-[127px] absolute left-0 top-0"
-        src="https://via.placeholder.com/162x127"
-        alt="Logo"
-      />
-      <div className="Frame77 h-[689px] p-6 absolute left-1/2 transform -translate-x-1/2 top-[87.5px] rounded-xl border border-gray-400 flex flex-col justify-start items-start gap-2.5">
-        <div className="Frame69 w-full flex flex-col justify-center items-center gap-6">
-          <div className="AddNews text-center text-[#2d2e2e] text-2xl font-semibold">
-            Add News
-          </div>
-          <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
-            <div className="Frame66 w-full flex flex-col justify-start items-start gap-4">
-              <label className="Title text-[#2d2e2e] text-base font-semibold">
-                Title
+    return (
+        <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+                <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+                    Title
+                </label>
                 <input
-                  type="text"
-                  name="title"
-                  value={formData.title}
-                  onChange={handleChange}
-                  className="Input w-full px-4 py-[17px] bg-[#f6f6f6] rounded"
-                  placeholder="News title"
+                    type="text"
+                    id="title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    required
                 />
-              </label>
             </div>
-            <div className="Frame74 w-full flex flex-col justify-start items-start gap-4">
-              <label className="Description text-[#2d2e2e] text-base font-semibold">
-                Content
+            <div>
+                <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+                    Description
+                </label>
                 <textarea
-                  name="content"
-                  value={formData.content}
-                  onChange={handleChange}
-                  className="Input w-full px-4 py-[17px] bg-[#f6f6f6] rounded"
-                  placeholder="News content"
-                />
-              </label>
+                    id="description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    required
+                ></textarea>
             </div>
-            <div className="Frame75 w-full flex flex-col justify-start items-start gap-4">
-              <label className="ImageUrl text-[#2d2e2e] text-base font-semibold">
-                Image URL
+            <div>
+                <label htmlFor="image" className="block text-sm font-medium text-gray-700">
+                    Image
+                </label>
                 <input
-                  type="text"
-                  name="imageUrl"
-                  value={formData.imageUrl}
-                  onChange={handleChange}
-                  className="Input w-full px-4 py-[17px] bg-[#f6f6f6] rounded"
-                  placeholder="Image address"
+                    type="file"
+                    id="image"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="mt-1 block w-full text-sm text-gray-500"
                 />
-              </label>
             </div>
-            <div className="Frame76 w-full flex flex-col justify-center items-start gap-6">
-              <button
-                type="submit"
-                className="Button w-full px-[30px] py-[17px] bg-[#264065] rounded flex justify-center items-center gap-2.5"
-              >
-                <div className="ContactUs text-white text-lg font-medium">
-                  Add News
-                </div>
-              </button>
+            <div>
+                <button
+                    type="submit"
+                    className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+                >
+                    Submit
+                </button>
             </div>
-          </form>
-          <button
-            onClick={onClose}
-            className="mt-4 px-4 py-2 bg-gray-500 text-white rounded"
-          >
-            Close
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+        </form>
+    );
 };
 
 export default ResidentNewsForm;
